@@ -9,12 +9,12 @@ import pathlib
 
 import google.generativeai as genai
 
-from IPython.display import display
-from IPython.display import Markdown
+# from IPython.display import display
+# from IPython.display import Markdown
 import os
 import pandas as pd
-from PyPDF2 import PdfReader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+# from PyPDF2 import PdfReader
+# from langchain.text_splitter import RecursiveCharacterTextSplitter
 import os
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 import google.generativeai as genai
@@ -29,7 +29,7 @@ import json
 import re
 import warnings
 warnings.filterwarnings('ignore')
-pd.set_option('display.max_colwidth', None)
+# pd.set_option('display.max_colwidth', None)
 
 genai.configure(api_key='')
 model = genai.GenerativeModel('gemini-1.5-flash')
