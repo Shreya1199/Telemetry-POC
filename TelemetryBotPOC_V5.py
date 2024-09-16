@@ -5,7 +5,7 @@
 
 
 import pathlib
-import textwrap
+# import textwrap
 
 import google.generativeai as genai
 
@@ -36,9 +36,9 @@ model = genai.GenerativeModel('gemini-1.5-flash')
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
 
 
-def to_markdown(text):
-    text = text.replace('•', '  *')
-    return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
+# def to_markdown(text):
+#     text = text.replace('•', '  *')
+#     return Markdown(textwrap.indent(text, '> ', predicate=lambda _: True))
  
 def get_text_chunks(text):
     try:
