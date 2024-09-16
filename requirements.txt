@@ -2,8 +2,8 @@ pathlib==1.0.1
 google-generativeai==0.7.2
 IPython==8.27.0
 pandas==2.2.2
-langchain-google-genai==1.0.10
-langchain==0.1.16
+langchain-google-genai
+langchain
 streamlit==1.33.0
 pandasql==0.7.3
 python-dotenv==1.0.1
