@@ -1,9 +1,5 @@
 #!/usr/bin/env python
 # coding: utf-8
-
-# In[2]:
-
-
 import pathlib
 
 import google.generativeai as genai
@@ -28,7 +24,6 @@ pd.set_option('display.max_colwidth', None)
 genai.configure(api_key='')
 model = genai.GenerativeModel('gemini-1.5-flash')
 GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
-
 
 # def to_markdown(text):
 #     text = text.replace('•', '  *')
@@ -88,10 +83,6 @@ except Exception as e:
         st.write(f"An unexpected error occurred: {str(e)}")
 
 
-
-# In[ ]:
-
-
 #this is the conversational chain for getting the telemetry using scenario ( Category 1 )
 def get_conversational_chain_telemetry(df):
     try:
@@ -136,16 +127,25 @@ def get_conversational_chain_telemetry(df):
     25) eventInfo.identifier
     26) databag.action_type
     27) subNav_entity_type
-    You need to work as a telemetry expert and give important telemetry markers by understanding the provided user question and generating a relevant
-    SQL query
- 
+    You need to work as a telemetry expert and give important telemetry markers by understanding the provided user question and generating a relevant SQL query
+
+subWorkLoadScanario list = [Community event - Add a community event to calendar,Meeting - Create a meeting,Community event - Cancel a community event,Community event - Create a community event,Meeting - Join a meeting through calender,Meeting - Join a meeting through chat,Meeting - Join a meeting through Communityforyou,Meeting - Join a meeting through invite link,Meeting - Edit a meeting,Meeting - Cancel a meeting,Community event - Join a community event through activity,Community event - Join a community event through calendar,Meeting - Options - Presenting/Sharing photo,Meeting - Options - Presenting/Sharing video,Community event - Join community event through Communityforyou ,Meeting - Options - Presenting/Sharing screen,Meeting - Options - Turning on video,Community event - Join a community event through event tab,Meeting - Options - Unmute,Community event - Join a community event through invite link,Community event - Join a community event through post,Meeting - Options - Hold the call,Meeting - Options - Resume a call,Community event - Leave a community event,Community event - Leave a community event by end for all,Community event - RSVP - Can't go,Community event - RSVP - Going in,Meeting - Leave a meeting,Community event - RSVP - May be,Meeting - Add a meeting to calendar,Meeting - Inviting people inside a meeting,Meeting - Leave a meeting by end for all ,Meeting - Meet now,Meeting - Meet now - Start meeting,Meeting - Options - Audio off,Meeting - Options - Change layout - Gallery view,Meeting - Options - Don't show chat bubbles,Meeting - RSVP - Accept,Meeting - Options - Live Caption,Meeting - RSVP - Tentative,Meeting - Options - Mute,Meeting - RSVP - Decline,Meeting - Options - Selecting a custom video background,Meeting - Options - Show chat bubbles,Meeting - Options - Speaker on ,Meeting - Options - Turn off incoming video,Meeting - Options - Turning off video,Meeting - Reaction - Applause,Meeting - Reaction - Laugh,Meeting - Reaction - Like,Meeting - Reaction - Love,Meeting - Reaction - Raise hand,Meeting - reaction - Surprise,Meeting - Options - Audio device,Meeting - Options - Speaker on iphone,Meeting - Options - Change layout - Together view,Meeting - Options - Change layout - Large gallery,Meeting - Options - Toggle on - All day,Meeting - Options - Toggle off - All day,Meeting - Options - Toggle off - Online,Meeting - Options - Toggle on - Online,Community event - Join a community event through chat,Community event - Edit a community event,Meeting - Join a meeting through meeting id,Community event - Create a community event through calendar,Community event - Leave a community event by end for all,Community event - Click on invite link,Meeting - Join a meeting through calendar,Meeting - Click on meeting id,Meeting - Options - Open reaction menu,Meeting - Options - Video effects ,Meeting - Options - Speaker view,Meeting - Reaction,Community event - Join a community event through event page,Meeting - Join a meeting through activity tab,Meeting - Options - Change layout - Dynamic view,Meeting - Options - Change layout - Speaker view,Meeting - Options - Caption,Meeting - Options - Speaker off,Meeting - Options - Speaker off ,Meeting - Options - Video effects,Community event - Join a community event through meeting tab] 
+
+Platform List = [IOS, Android, Web, Maglev]
+
     Instructions:
-    You need to create a sql query for fetching telemetry columns by understanding the question asked by the user
-    Example Question: Give me the telemetry/markers for joining a meeting
-    In the above question, "joining a meeting" is the action that user need the telemetry for.
-    Whenever a user asks telemetry for a specific action, find the similar item in the SubWorkLoadScenario list, then use that item in the SQL query like SubWorkLoadScenario = 'similar SubWorkLoadScenario list item'
-    Expected Output Format
-    Return the SQL query as plain text
+    - You need to create a sql query for fetching telemetry columns by understanding the question asked by the user
+    - Example Question: Give me the telemetry/markers for meeting creation
+    - In the above question, 'meeting creation' is the action that user need the telemetry for, which is nothing but same as "Meeting - Create a Meeting" in subWorkLoadScenario
+    - Whenever a user asks telemetry for a specific action, find the synonymous expressions in the SubWorkLoadScenario list, then use that item in the SQL query like SubWorkLoadScenario = 'synonymous SubWorkLoadScenario list item'
+    - If user is asking the telemetries/markers for specific platforms, check for the similar platforms in the Platform List and use those Platform List items in the query.
+    - Example: Provide me with the markers for 'specific action' in android and maglev
+    - In query add the Platform filter like "Platform in (Android,Maglev) and follow this instruction for other combinations of the platforms as well.
+    - If asked for "Markers", don't get confused. Both "Telemetry" and "Markers" are the same
+    
+    Expected Output Format:
+    - Return the SQL query as plain text
+    
     IMPORTANT:
     Identify the columns which should be used for select clause and columns which should be used inside where clause.
     Using the {context} understand the column name that is close relevant to the {question}
@@ -155,31 +155,26 @@ def get_conversational_chain_telemetry(df):
         -Ignore special character, compare it to {context} and then identify the close relevant 
         -Ignore case sensitive, compare it to {context} and identify the close relevant 
     Always assume that the user want only the "Primary" values records in the Action_Type column
+    Always assume that both "Telemetry" and "Markers" are the same. Both are same
+    
     Constraints:
-    Only the sql query generated in a single line.
-    Don't include additional information
-    Don't include any characters above or below the sql squery
+    - Generate SQL query only in a single line.
+    - Don't include additional information
+    - Don't include any characters above or below the sql squery
+    
     Example SQL Query and User Question - 
-    1)Give me the telemetry for joining a meeting through calendar 
+    1)Give me the telemetry for joining a meeting via calendar 
     SELECT [Platform],[subWorkLoadScenario],[Action_Type],[action_gesture],[module_name],[module_type],[action_outcome],[panel_type],[action_scenario],[action_scenario_type],[action_subWorkLoad],[thread_type],[databag.rsvp],[module_summary],[target_thread_type],[databag.meeting_rsvp],[databag.is_toggle_on],[databag.community_rsvp],[main_entity_type],[main_slot_app],[eventInfo.identifier],[databag.action_type],[subNav_entity_type] FROM df WHERE subWorkLoadScenario like "%user%asked%action%" AND Action_Type = 'Primary'
     2)Provide me with the markers for adding a meeting to calendar in IOS and Android 
     SELECT [Platform],[subWorkLoadScenario],[Action_Type],[action_gesture],[module_name],[module_type],[action_outcome],[panel_type],[action_scenario],[action_scenario_type],[action_subWorkLoad],[thread_type],[databag.rsvp],[module_summary],[target_thread_type],[databag.meeting_rsvp],[databag.is_toggle_on],[databag.community_rsvp],[main_entity_type],[main_slot_app],[eventInfo.identifier],[databag.action_type],[subNav_entity_type] FROM df WHERE subWorkLoadScenario like "%user%asked%action%" AND Platform in ('IOS', 'Android') AND Action_Type = 'Primary'
     3)Could you give me the telemetry markers for turning off the video in a meeting in Maglev
     SELECT [Platform],[subWorkLoadScenario],[Action_Type],[action_gesture],[module_name],[module_type],[action_outcome],[panel_type],[action_scenario],[action_scenario_type],[action_subWorkLoad],[thread_type],[databag.rsvp],[module_summary],[target_thread_type],[databag.meeting_rsvp],[databag.is_toggle_on],[databag.community_rsvp],[main_entity_type],[main_slot_app],[eventInfo.identifier],[databag.action_type],[subNav_entity_type] FROM df WHERE subWorkLoadScenario like "%user%asked%action%" AND Platform in ('Maglev') AND Action_Type = 'Primary'
+    
     Important:
     The above examples are just for your understanding, don't copy the exact same thing from the prompt template in your response
-    Include a platform filter in the query, if any of the following platforms—iOS, Android, Web, and Maglev—have been mentioned specifically in the user's question; if not, include all four platforms in the query.
     Always use the filter Action_Type = "Primary"
-    Change the filter condition in the Platform column based on the user requirement, If user mentioned IOS, then provide the where condition as platform in ('IOS'). If user mentioned Web, then provide the where condition as platform in ('Web').If user mentioned Android and Maglev, then provide the where condition as platform in ('Android', 'Maglev')
-    Like the above important instruction modify the query based on the user requirement
- 
-    
-If specifically mentioned android or maglev or ios or web, select the mentioned platform values in the where condition with platform column
-for ex: if asked for Android - Query: Platform = 'Android'
-for ex: if asked for Ios and Android - Query: Platform in ['Android', 'IOS']
- 
-Take above examples as examples and generate query based on the users question    
-        
+    Based on the above important instruction modify the query based on the user requirement
+
         """
      
         model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0.3)
@@ -864,7 +859,7 @@ def get_conversational_chain_prompt(user_question):
         - **User Query**: "Give me the recommended telemetry or marker for the new feature where it is inside the meeting feature."
         - **Expected Response**:
             -Recommendations
-        - **User Query**: "I need the telemetry or marker  for the new feature that's included inside that feature."
+        - **User Query**: "I need the telemetry or marker for the new feature that's included inside that feature."
         - **Expected Response**:
             -Recommendations
         - **User Query**: "what markers are available for the new features?"
@@ -981,14 +976,16 @@ def main():
                 else:
                     st.write(message["content"])
         
+        
         # User input section (This should appear only once)
-        with st.chat_message("user"):
-            st.write("Hi, I'm here to help you with telemetry related queries")
+        if st.session_state.messages==[]:
+            with st.chat_message("user"):
+                st.write("Hi, I'm here to help you with telemetry related queries")
+                
+            with st.chat_message("assistant"):
+                st.write("Here the response will be displayed")
             
-        with st.chat_message("assistant"):
-            st.write("Here the response will be displayed")
-            
-        user_question = st.chat_input("Please type your query here")
+        user_question = st.chat_input("What would you like to process?")
         if user_question:
             # Set the query flag to True
             st.session_state.has_query = True
@@ -1051,31 +1048,20 @@ if __name__ == "__main__":
 
 
 
-# In[ ]:
 
 
 
 
 
-# In[ ]:
 
 
 
 
 
-# In[ ]:
 
 
 
 
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 
