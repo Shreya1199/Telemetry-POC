@@ -1030,8 +1030,8 @@ def main():
     padding_sidebar_style = """
     <style>
     [data-testid="stSidebarUserContent"] {
-        padding-top: 35px;
-        padding-bottom: 10px;
+        padding-top: 8%;
+        padding-bottom: 10%;
     }
     </style>
     """
@@ -1040,9 +1040,9 @@ def main():
     sidebar_width_static = """
     <style>
             [data-testid="stSidebar"] {
-                width: 300px; 
-                min-width: 300px;
-                max-width: 300px;
+                width: 17%; 
+                min-width: 17%;
+                max-width: 17%;
             }
             [data-testid="stSidebarResizer"] {
                 display: none;
@@ -1057,7 +1057,7 @@ def main():
         padding-top: 0;
         padding-right: 0;
         padding-left: 0;
-        width: 1000px;
+        width: 70%;
     }
     </style>
     """
