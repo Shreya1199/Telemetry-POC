@@ -990,14 +990,14 @@ def category_prompt(user_question):
         
         response = chain({"input_documents": [], "question": user_question}, return_only_outputs=True)
         
-        if "Telemetry" in response["output_text"]:
+        if "telemetry" in response["output_text"].lower():
             return "Telemetry"
-        elif "Subworkloadscenario" in response["output_text"]:
+        elif "subworkloadscenario" in response["output_text"].lower():
             return "Subworkloadscenario"
-        elif "Recommendation" in response["output_text"]:
+        elif "recommendation" in response["output_text"].lower():
             return "Recommendation"
-        elif "others" in response["output_text"]:
-            return "others"          
+        elif "others" in response["output_text"].lower():
+            return "others"       
     except Exception as e:
         return "Sorry, couldn't process your question. Try aasking questions related to telemetry"
 
