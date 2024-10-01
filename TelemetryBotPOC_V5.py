@@ -28,7 +28,7 @@ pd.set_option('display.max_colwidth', None)
 
 genai.configure(api_key='')
 model = genai.GenerativeModel('gemini-1.5-flash')
-os.environ['GOOGLE_API_KEY'] = 'AIzaSyBoc3pj-oG-voulijbNxiBAA_6hzQN945g'
+GOOGLE_API_KEY = os.environ.get("GOOGLE_API_KEY")
  
 def get_text_chunks(text):
     try:
