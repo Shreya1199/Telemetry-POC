@@ -744,38 +744,8 @@ def Recommendation_response(user_question):
                 inter_list.append('\n')
                 
         result = ''.join(inter_list)
-   
-        platform_line = re.search(r'(^Platform:\s.*)', result, re.MULTILINE)
-        scenario_line = re.search(r'(^Scenario:\s.*)', result, re.MULTILINE)
-        explanation_line = re.search(r'(^Explanation:)', result, re.MULTILINE)
-        key_points_line = re.search(r'(^Key Points:)', result, re.MULTILINE)
-        # Format the lines with Markdown for larger text and bold
-        if platform_line:
-            platform_line = platform_line.group(1)
-            platform_line = f"## **{platform_line}**"  
-        if scenario_line:
-            scenario_line = scenario_line.group(1)
-            scenario_line = f"## **{scenario_line}**"  
- 
-        if explanation_line:
-            explanation_line = explanation_line.group(1)
-            explanation_line = f"### **{explanation_line}**"  
- 
-        if key_points_line:
-            key_points_line = key_points_line.group(1)
-            key_points_line = f"### **{key_points_line}**"  
- 
-        final_result = result
-        if platform_line:
-            final_result = re.sub(r'(^Platform:\s.*)', platform_line, final_result, flags=re.MULTILINE)
-        if scenario_line:
-            final_result = re.sub(r'(^Scenario:\s.*)', scenario_line, final_result, flags=re.MULTILINE)
-        if explanation_line:
-            final_result = re.sub(r'(^Explanation:)', explanation_line, final_result, flags=re.MULTILINE)
-        if key_points_line:
-            final_result = re.sub(r'(^Key Points:)', key_points_line, final_result, flags=re.MULTILINE)
- 
-        return final_result
+  
+        return result
         
         
     except Exception as e:
